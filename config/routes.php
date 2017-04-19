@@ -82,6 +82,10 @@ Router::scope('/', function ($routes) {
             'load/' => [
                 'action' => 'load',
                 'method' => 'POST'
+            ],
+            'saveMany' => [
+                'action' => 'saveMany',
+                'method' => 'POST'
             ]
         ]
     ]);

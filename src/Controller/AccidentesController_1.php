@@ -125,26 +125,42 @@ class AccidentesController extends AppController
             $importer = new CsvImporter($csv["tmp_name"], true, ';');
             $accidentes = $importer->get();
             
-            $i = 1;
             foreach ($accidentes as $k_accidente => $accidente) {
-                $accidentes[$k_accidente]['nro'] = $i;
-                $i++;
+                // Ubicaciones
+                $ubicacion_text = $accidente['ubicacion'];
+                
+                $detalleUbicacion = $this->Accidentes->Ubicaciones->DetalleUbicaciones->find()
+                    ->contain(["Ubicaciones"])
+                    ->where(['DetalleUbicaciones.descripcion' => $ubicacion_text])
+                    ->first();
+                
+                if (is_null($detalleUbicacion)) {
+                    $accidentes[$k_accidente]['ubicacion_text'] = $accidente['ubicacion'];
+                    $accidentes[$k_accidente]['ubicacion'] = null;
+                } else {
+                    $accidentes[$k_accidente]['ubicacion_text'] = $detalleUbicacion->ubicacion->descripcion;
+                    $accidentes[$k_accidente]['ubicacion'] = $detalleUbicacion->ubicacion;
+                }
+                
+                // Causas
+                $causa_text = $accidente['causa'];
+                
+                $detalleCausa = $this->Accidentes->Causas->DetalleCausas->find()
+                    ->contain(["Causas"])
+                    ->where(['DetalleCausas.descripcion' => $causa_text])
+                    ->first();
+                
+                if (is_null($detalleCausa)) {
+                    $accidentes[$k_accidente]['causa_text'] = $accidente['causa'];
+                    $accidentes[$k_accidente]['causa'] = null;
+                } else {
+                    $accidentes[$k_accidente]['causa_text'] = $detalleCausa->causa->descripcion;
+                    $accidentes[$k_accidente]['causa'] = $detalleCausa->causa;
+                }
             }
             
             $this->set(compact("accidentes"));
             $this->set("_serialize", ["accidentes"]);
         }
-    }
-    
-    public function saveMany() {
-        $this->viewBuilder()->layout(false);
-        
-        if ($this->request->is('post')) {
-            $accidentes = $this->Accidentes->newEntities($this->request->data);
-            foreach ($accidentes as $accidente) {
-                $this->Accidentes->save($accidente);
-            }
-        }
-        
     }
 }

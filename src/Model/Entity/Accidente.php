@@ -35,11 +35,6 @@ class Accidente extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
-        'nro' => false,
-        'anio' => false,
-        'ubicacion_id' => false,
-        'causa_id' => false,
-        'estado_id' => false
+        '*' => true
     ];
 }
