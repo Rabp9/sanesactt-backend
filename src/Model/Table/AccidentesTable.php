@@ -56,7 +56,11 @@ class AccidentesTable extends Table
             ->where(['anio' => $entity->anio])
             ->order(['nro_id' => 'DESC'])
             ->first();
-        $entity->nro_id = $last_accidente->nro_id + 1;
+        if ($last_accidente) {
+            $entity->nro_id = $last_accidente->nro_id + 1;            
+        } else {
+            $entity->nro_id = 1;
+        }
     }
                                                                                                                                                                                                                                            
 }
