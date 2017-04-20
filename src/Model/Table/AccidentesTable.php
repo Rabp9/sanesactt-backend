@@ -34,8 +34,8 @@ class AccidentesTable extends Table
         parent::initialize($config);
 
         $this->table('accidentes');
-        $this->displayField('nro');
-        $this->primaryKey(['nro', 'anio', 'ubicacion_id', 'causa_id', 'estado_id']);
+        $this->displayField('nro_id');
+        $this->primaryKey(['nro_id', 'anio']);
 
         $this->belongsTo('Ubicaciones', [
             'foreignKey' => 'ubicacion_id',
@@ -51,7 +51,12 @@ class AccidentesTable extends Table
         ]);
     }
     
-    public function beforeSave($options = array()) {
-        $this->
-    }                                                                                                                                                                                                                                                   
+    public function beforeSave($event, $entity, $options) {
+        $last_accidente = $this->find()
+            ->where(['anio' => $entity->anio])
+            ->order(['nro_id' => 'DESC'])
+            ->first();
+        $entity->nro_id = $last_accidente->nro_id + 1;
+    }
+                                                                                                                                                                                                                                           
 }

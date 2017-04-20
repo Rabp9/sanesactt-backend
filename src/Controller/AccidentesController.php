@@ -4,6 +4,9 @@ namespace App\Controller;
 use App\Controller\AppController;
 use rabp9\CsvImporter;
 require_once(ROOT . DS . 'vendor' . DS . 'rabp9' . DS . 'CsvImporter.php');
+use Cake\I18n\FrozenDate;
+use Cake\I18n\FrozenTime;
+use Cake\Datasource\ConnectionManager;
 /**
  * Accidentes Controller
  *
@@ -127,7 +130,7 @@ class AccidentesController extends AppController
             
             $i = 1;
             foreach ($accidentes as $k_accidente => $accidente) {
-                $accidentes[$k_accidente]['nro'] = $i;
+                $accidentes[$k_accidente]['id'] = $i;
                 $i++;
             }
             
@@ -138,13 +141,37 @@ class AccidentesController extends AppController
     
     public function saveMany() {
         $this->viewBuilder()->layout(false);
-        
         if ($this->request->is('post')) {
             $accidentes = $this->Accidentes->newEntities($this->request->data);
+            $conn = ConnectionManager::get('default');
+            $conn->begin();
+            $saveStatus = 1;
             foreach ($accidentes as $accidente) {
-                $this->Accidentes->save($accidente);
+                $accidente->fecha = new FrozenDate($accidente->fecha);
+                $accidente->anio = $accidente->fecha->year;
+                $accidente->fechaHora = new FrozenTime($accidente->fecha . ' ' . $accidente->hora);
+                $accidente->estado_id = 1;
+                
+                if(!$this->Accidentes->save($accidente))  {
+                    $saveStatus = 0;
+                }
+            }
+            if ($saveStatus) {
+                $conn->commit();
+                $message =  [
+                    'text' => __('Los asccidentes fueron guardados correctamente'),
+                    'type' => 'success',
+                ];
+            } else {
+                $conn->rollback();
+                $message =  [
+                    'text' => __('Los asccidentes no fueron guardados correctamente'),
+                    'type' => 'error',
+                ];
             }
         }
         
+        $this->set(compact('message', 'accidentes'));
+        $this->set("_serialize", ['message']);
     }
 }

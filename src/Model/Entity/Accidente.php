@@ -18,8 +18,6 @@ use Cake\ORM\Entity;
  * @property int $causa_id
  * @property int $estado_id
  *
- * @property \App\Model\Entity\Ubicacione $ubicacione
- * @property \App\Model\Entity\Causa $causa
  * @property \App\Model\Entity\Estado $estado
  */
 class Accidente extends Entity
