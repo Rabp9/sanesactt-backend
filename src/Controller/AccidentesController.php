@@ -20,12 +20,9 @@ class AccidentesController extends AppController
      *
      * @return \Cake\Network\Response|null
      */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Ubicaciones', 'Causas', 'Estados']
-        ];
-        $accidentes = $this->paginate($this->Accidentes);
+    public function index() {
+        $accidentes = $this->Accidentes->find()
+            ->where(['estado_id' => 1]);
 
         $this->set(compact('accidentes'));
         $this->set('_serialize', ['accidentes']);
