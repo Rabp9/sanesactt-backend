@@ -22,7 +22,7 @@ class AccidentesController extends AppController
      */
     public function index() {
         $accidentes = $this->Accidentes->find()
-            ->where(['estado_id' => 1]);
+            ->where(['estado_id IN' => [1, 3]]);
 
         $this->set(compact('accidentes'));
         $this->set('_serialize', ['accidentes']);
@@ -147,7 +147,7 @@ class AccidentesController extends AppController
                 $accidente->fecha = new FrozenDate($accidente->fecha);
                 $accidente->anio = $accidente->fecha->year;
                 $accidente->fechaHora = new FrozenTime($accidente->fecha . ' ' . $accidente->hora);
-                $accidente->estado_id = 1;
+                $accidente->estado_id = 3;
                 
                 if(!$this->Accidentes->save($accidente))  {
                     $saveStatus = 0;
