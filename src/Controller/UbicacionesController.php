@@ -162,5 +162,44 @@ class UbicacionesController extends AppController
         }
         $this->set('_serialize', ['ubicaciones', 'TotalRecords']);
     }
+      
+    public function preview() {
+        if ($this->request->is("post")) {
+            $foto = $this->request->data["file"];
+            
+            $filename = $this->randomString();
+            $url = WWW_ROOT . "tmp" . DS . $filename;
+                        
+            while (file_exists($url)) {
+                $filename = $this->randomString();
+                $url = WWW_ROOT . "tmp" . DS . $filename;
+            }
+            
+            if (move_uploaded_file($foto["tmp_name"], $url)) {
+                $message = [
+                    "type" => "success",
+                    "text" => "La foto fue subida con éxito"
+                ];
+            } else {
+                $message = [
+                    "type" => "error",
+                    "text" => "La foto no fue subida con éxito",
+                ];
+            }
+            
+            $this->set(compact("message", "filename"));
+            $this->set("_serialize", ["message", "filename"]);
+        }
+    }
     
+    private function randomString($length = 8) {
+        $str = "";
+        $characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
+        $max = count($characters) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $rand = mt_rand(0, $max);
+            $str .= $characters[$rand];
+        }
+        return $str;
+    }
 }

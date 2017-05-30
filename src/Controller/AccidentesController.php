@@ -35,13 +35,18 @@ class AccidentesController extends AppController
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $accidente = $this->Accidentes->get($id, [
-            'contain' => ['Ubicaciones', 'Causas', 'Estados']
-        ]);
-
-        $this->set('accidente', $accidente);
+    public function getByNroIdNAnio() {
+        $nro_id = $this->request->query('nro_id');
+        $anio = $this->request->query('anio');
+        
+        $accidente = $this->Accidentes->find()
+            ->where([
+                'nro_id' => $nro_id,
+                'anio' => $anio
+            ])
+            ->first();
+        
+        $this->set(compact('accidente'));
         $this->set('_serialize', ['accidente']);
     }
 

@@ -86,6 +86,10 @@ Router::scope('/', function ($routes) {
             'saveMany' => [
                 'action' => 'saveMany',
                 'method' => 'POST'
+            ],
+            'getByNroIdNAnio' => [
+                'action' => 'getByNroIdNAnio',
+                'method' => 'GET'
             ]
         ]
     ]);
@@ -97,6 +101,10 @@ Router::scope('/', function ($routes) {
             ],
             'buscarUbicaciones/' => [
                 'action' => 'buscarUbicaciones',
+                'method' => 'POST'
+            ],
+            'preview/' => [
+                'action' => 'preview',
                 'method' => 'POST'
             ]
         ]
