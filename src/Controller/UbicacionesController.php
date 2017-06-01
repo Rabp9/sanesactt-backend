@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-
+use Cake\Filesystem\File;
 /**
  * Ubicaciones Controller
  *
@@ -47,25 +47,29 @@ class UbicacionesController extends AppController
      * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
-        $this->viewBuilder()->layout(false);
-        $ubicacion = $this->Ubicaciones->newEntity();
-        $ubicacion->estado_id = 1;
         if ($this->request->is('post')) {
-            $ubicacion = $this->Ubicaciones->patchEntity($ubicacion, $this->request->data);
-            if ($this->Ubicaciones->save($ubicacion)) {
-                $message =  [
-                    'text' => __('La Ubicación fue registrada correctamente'),
-                    'type' => 'success',
-                ];
+            $ubicacion = $this->Ubicaciones->newEntity($this->request->data);
+            $ubicacion->estado_id = 1;
+            
+            $path_src = WWW_ROOT . "tmp" . DS;
+            $file_tmp = new File($path_src . $ubicacion->foto);
+            
+            $path_dst = WWW_ROOT . 'img' . DS . 'ubicaciones' . DS;
+            $ubicacion->foto = $this->Random->randomFileName($path_dst, 'ubicacion-');
+            
+            if ($file_tmp->copy($path_dst . $ubicacion->foto)) {
+                if ($this->Ubicaciones->save($ubicacion)) {              
+                    $code = 200;
+                    $message = 'La ubicación fue guardada correctamente';
+                } else {
+                    $message = 'La ubicación no fue guardada correctamente';
+                }
             } else {
-                $message =  [
-                    'text' => __('La Ubicación no fue registrada correctamente'),
-                    'type' => 'error',
-                ];
+                $message = 'La ubicación no fue guardada correctamente';
             }
         }
-        $this->set(compact('ubicacion', 'message'));
-        $this->set('_serialize', ['ubicacion', 'message']);
+        $this->set(compact('ubicacion', 'code', 'message'));
+        $this->set('_serialize', ['ubicacion', 'code', 'message']);
     }
 
     /**
@@ -165,17 +169,13 @@ class UbicacionesController extends AppController
       
     public function preview() {
         if ($this->request->is("post")) {
-            $foto = $this->request->data["file"];
+            $path = WWW_ROOT . "tmp" . DS;
+            $file = $this->request->data["file"];
             
-            $filename = $this->randomString();
-            $url = WWW_ROOT . "tmp" . DS . $filename;
-                        
-            while (file_exists($url)) {
-                $filename = $this->randomString();
-                $url = WWW_ROOT . "tmp" . DS . $filename;
-            }
+            $foto = new File($file["tmp_name"]);
+            $filename = $this->Random->randomFileName($path);
             
-            if (move_uploaded_file($foto["tmp_name"], $url)) {
+            if ($foto->copy($path . $filename)) {
                 $message = [
                     "type" => "success",
                     "text" => "La foto fue subida con éxito"
@@ -190,16 +190,5 @@ class UbicacionesController extends AppController
             $this->set(compact("message", "filename"));
             $this->set("_serialize", ["message", "filename"]);
         }
-    }
-    
-    private function randomString($length = 8) {
-        $str = "";
-        $characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
-        $max = count($characters) - 1;
-        for ($i = 0; $i < $length; $i++) {
-            $rand = mt_rand(0, $max);
-            $str .= $characters[$rand];
-        }
-        return $str;
     }
 }
