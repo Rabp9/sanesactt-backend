@@ -224,3 +224,6 @@ if (Configure::read('debug')) {
 }
 
 Plugin::load('Cors', ['bootstrap' => true, 'routes' => false]);
+
+use Cake\I18n\FrozenTime;
+FrozenTime::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');
