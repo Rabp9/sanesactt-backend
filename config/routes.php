@@ -121,6 +121,8 @@ Router::scope('/', function ($routes) {
             ]
         ]
     ]);
+    $routes->resources('TipoVehiculos');
+    $routes->resources('TipoServicios');
 });
 
 Plugin::routes();

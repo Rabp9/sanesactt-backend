@@ -12,6 +12,7 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\BelongsTo $Ubicaciones
  * @property \Cake\ORM\Association\BelongsTo $Causas
  * @property \Cake\ORM\Association\BelongsTo $Estados
+ * @property \Cake\ORM\Association\HasMany $DetalleAccidentes
  *
  * @method \App\Model\Entity\Accidente get($primaryKey, $options = [])
  * @method \App\Model\Entity\Accidente newEntity($data = null, array $options = [])
@@ -48,6 +49,10 @@ class AccidentesTable extends Table
         $this->belongsTo('Estados', [
             'foreignKey' => 'estado_id',
             'joinType' => 'INNER'
+        ]);
+        
+        $this->hasMany('DetalleAccidentes', [
+            'foreignKey' => 'detalle_accidente_id'
         ]);
     }
     

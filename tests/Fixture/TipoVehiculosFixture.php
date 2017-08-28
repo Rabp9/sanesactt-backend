@@ -4,10 +4,10 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * TipoServiciosFixture
+ * TipoVehiculosFixture
  *
  */
-class TipoServiciosFixture extends TestFixture
+class TipoVehiculosFixture extends TestFixture
 {
 
     /**
@@ -18,15 +18,15 @@ class TipoServiciosFixture extends TestFixture
     // @codingStandardsIgnoreStart
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'descripcion' => ['type' => 'string', 'length' => 60, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'descripcion' => ['type' => 'string', 'length' => 45, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'estado_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
-            'fk_tipo_servicios_estados1_idx' => ['type' => 'index', 'columns' => ['estado_id'], 'length' => []],
+            'fk_tipo_vehiculos_estados1_idx' => ['type' => 'index', 'columns' => ['estado_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id', 'estado_id'], 'length' => []],
             'descripcion_UNIQUE' => ['type' => 'unique', 'columns' => ['descripcion'], 'length' => []],
-            'fk_tipo_servicios_estados1' => ['type' => 'foreign', 'columns' => ['estado_id'], 'references' => ['estados', 'id'], 'update' => 'noAction', 'delete' => 'noAction', 'length' => []],
+            'fk_tipo_vehiculos_estados1' => ['type' => 'foreign', 'columns' => ['estado_id'], 'references' => ['estados', 'id'], 'update' => 'noAction', 'delete' => 'noAction', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',

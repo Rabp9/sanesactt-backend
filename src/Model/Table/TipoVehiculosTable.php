@@ -7,19 +7,19 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * TipoServicios Model
+ * TipoVehiculos Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Estados
  *
- * @method \App\Model\Entity\TipoServicio get($primaryKey, $options = [])
- * @method \App\Model\Entity\TipoServicio newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\TipoServicio[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\TipoServicio|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\TipoServicio patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\TipoServicio[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\TipoServicio findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\TipoVehiculo get($primaryKey, $options = [])
+ * @method \App\Model\Entity\TipoVehiculo newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\TipoVehiculo[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\TipoVehiculo|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\TipoVehiculo patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\TipoVehiculo[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\TipoVehiculo findOrCreate($search, callable $callback = null, $options = [])
  */
-class TipoServiciosTable extends Table
+class TipoVehiculosTable extends Table
 {
 
     /**
@@ -32,7 +32,7 @@ class TipoServiciosTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('tipo_servicios');
+        $this->table('tipo_vehiculos');
         $this->displayField('id');
         $this->primaryKey(['id', 'estado_id']);
 

@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\TipoServiciosTable;
+use App\Model\Table\TipoVehiculosTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\TipoServiciosTable Test Case
+ * App\Model\Table\TipoVehiculosTable Test Case
  */
-class TipoServiciosTableTest extends TestCase
+class TipoVehiculosTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\TipoServiciosTable
+     * @var \App\Model\Table\TipoVehiculosTable
      */
-    public $TipoServicios;
+    public $TipoVehiculos;
 
     /**
      * Fixtures
@@ -24,7 +24,7 @@ class TipoServiciosTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.tipo_servicios',
+        'app.tipo_vehiculos',
         'app.estados',
         'app.accidentes',
         'app.ubicaciones',
@@ -32,7 +32,8 @@ class TipoServiciosTableTest extends TestCase
         'app.causas',
         'app.detalle_causas',
         'app.detalle_accidentes',
-        'app.clase_vehiculos'
+        'app.clase_vehiculos',
+        'app.tipo_servicios'
     ];
 
     /**
@@ -43,8 +44,8 @@ class TipoServiciosTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('TipoServicios') ? [] : ['className' => 'App\Model\Table\TipoServiciosTable'];
-        $this->TipoServicios = TableRegistry::get('TipoServicios', $config);
+        $config = TableRegistry::exists('TipoVehiculos') ? [] : ['className' => 'App\Model\Table\TipoVehiculosTable'];
+        $this->TipoVehiculos = TableRegistry::get('TipoVehiculos', $config);
     }
 
     /**
@@ -54,7 +55,7 @@ class TipoServiciosTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->TipoServicios);
+        unset($this->TipoVehiculos);
 
         parent::tearDown();
     }
