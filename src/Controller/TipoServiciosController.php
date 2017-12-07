@@ -34,14 +34,11 @@ class TipoServiciosController extends AppController
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $tipoServicio = $this->TipoServicios->get($id, [
-            'contain' => ['Estados']
-        ]);
+    public function view($id = null) {
+        $tipo_servicio = $this->TipoServicios->get($id);
 
-        $this->set('tipoServicio', $tipoServicio);
-        $this->set('_serialize', ['tipoServicio']);
+        $this->set('tipo_servicio', $tipo_servicio);
+        $this->set('_serialize', ['tipo_servicio']);
     }
 
     /**

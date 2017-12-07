@@ -52,7 +52,7 @@ class AccidentesTable extends Table
         ]);
         
         $this->hasMany('DetalleAccidentes', [
-            'foreignKey' => 'detalle_accidente_id'
+            'foreignKey' => ['accidente_nro_id', 'accidente_anio']
         ]);
     }
     

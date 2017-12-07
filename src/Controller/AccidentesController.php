@@ -40,6 +40,7 @@ class AccidentesController extends AppController
         $anio = $this->request->query('anio');
         
         $accidente = $this->Accidentes->find()
+            ->contain(['DetalleAccidentes'])
             ->where([
                 'nro_id' => $nro_id,
                 'anio' => $anio

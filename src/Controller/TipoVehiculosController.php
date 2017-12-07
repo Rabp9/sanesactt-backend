@@ -34,14 +34,11 @@ class TipoVehiculosController extends AppController
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $tipoVehiculo = $this->TipoVehiculos->get($id, [
-            'contain' => ['Estados']
-        ]);
+    public function view($id = null) {
+        $tipo_vehiculo = $this->TipoVehiculos->get($id);
 
-        $this->set('tipoVehiculo', $tipoVehiculo);
-        $this->set('_serialize', ['tipoVehiculo']);
+        $this->set('tipo_vehiculo', $tipo_vehiculo);
+        $this->set('_serialize', ['tipo_vehiculo']);
     }
 
     /**
