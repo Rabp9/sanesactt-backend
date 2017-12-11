@@ -46,21 +46,21 @@ class TipoVehiculosController extends AppController
      *
      * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
-        $tipoVehiculo = $this->TipoVehiculos->newEntity();
-        if ($this->request->is('post')) {
-            $tipoVehiculo = $this->TipoVehiculos->patchEntity($tipoVehiculo, $this->request->data);
-            if ($this->TipoVehiculos->save($tipoVehiculo)) {
-                $this->Flash->success(__('The tipo vehiculo has been saved.'));
+    public function add() {
+        $tipo_vehiculo = $this->TipoVehiculos->newEntity();
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is('post')) {
+            $tipo_vehiculo = $this->TipoVehiculos->patchEntity($tipo_vehiculo, $this->request->data);
+            
+            if ($this->TipoVehiculos->save($tipo_vehiculo)) {
+                $code = 200;
+                $message = 'El Tipo de Vehículo fue guardado correctamente';
+            } else {
+                $message = 'El Tipo de Vehículo no fue guardado correctamente';
             }
-            $this->Flash->error(__('The tipo vehiculo could not be saved. Please, try again.'));
         }
-        $estados = $this->TipoVehiculos->Estados->find('list', ['limit' => 200]);
-        $this->set(compact('tipoVehiculo', 'estados'));
-        $this->set('_serialize', ['tipoVehiculo']);
+        $this->set(compact('tipo_vehiculo', 'code', 'message'));
+        $this->set('_serialize', ['tipo_vehiculo', 'code', 'message']);
     }
 
     /**
