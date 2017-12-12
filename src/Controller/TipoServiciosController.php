@@ -46,21 +46,21 @@ class TipoServiciosController extends AppController
      *
      * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
-        $tipoServicio = $this->TipoServicios->newEntity();
-        if ($this->request->is('post')) {
-            $tipoServicio = $this->TipoServicios->patchEntity($tipoServicio, $this->request->data);
-            if ($this->TipoServicios->save($tipoServicio)) {
-                $this->Flash->success(__('The tipo servicio has been saved.'));
+    public function add() {
+        $tipo_servicio = $this->TipoServicios->newEntity();
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is('post')) {
+            $tipo_servicio = $this->TipoServicios->patchEntity($tipo_servicio, $this->request->data);
+            
+            if ($this->TipoServicios->save($tipo_servicio)) {
+                $code = 200;
+                $message = 'El Tipo de Servicio fue guardado correctamente';
+            } else {
+                $message = 'El Tipo de Servicio no fue guardado correctamente';
             }
-            $this->Flash->error(__('The tipo servicio could not be saved. Please, try again.'));
         }
-        $estados = $this->TipoServicios->Estados->find('list', ['limit' => 200]);
-        $this->set(compact('tipoServicio', 'estados'));
-        $this->set('_serialize', ['tipoServicio']);
+        $this->set(compact('tipo_servicio', 'code', 'message'));
+        $this->set('_serialize', ['tipo_servicio', 'code', 'message']);
     }
 
     /**
