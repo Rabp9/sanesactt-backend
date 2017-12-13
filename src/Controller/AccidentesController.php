@@ -153,7 +153,7 @@ class AccidentesController extends AppController
                 $accidente->fecha = new FrozenDate($accidente->fecha);
                 $accidente->anio = $accidente->fecha->year;
                 $accidente->fechaHora = new FrozenTime($accidente->fecha . ' ' . $accidente->hora);
-                $accidente->estado_id = 3;
+                $accidente->estado_id = 1;
                 
                 if(!$this->Accidentes->save($accidente))  {
                     $saveStatus = 0;
