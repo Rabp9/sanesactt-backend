@@ -56,23 +56,20 @@ class AccidentesController extends AppController
      *
      * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
+    public function add() {
         $accidente = $this->Accidentes->newEntity();
         if ($this->request->is('post')) {
             $accidente = $this->Accidentes->patchEntity($accidente, $this->request->data);
+            
             if ($this->Accidentes->save($accidente)) {
-                $this->Flash->success(__('The accidente has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $code = 200;
+                $message = 'El accidente fue guardado correctamente';
+            } else {
+                $message = 'El accidente no fue guardado correctamente';
             }
-            $this->Flash->error(__('The accidente could not be saved. Please, try again.'));
         }
-        $ubicaciones = $this->Accidentes->Ubicaciones->find('list', ['limit' => 200]);
-        $causas = $this->Accidentes->Causas->find('list', ['limit' => 200]);
-        $estados = $this->Accidentes->Estados->find('list', ['limit' => 200]);
-        $this->set(compact('accidente', 'ubicaciones', 'causas', 'estados'));
-        $this->set('_serialize', ['accidente']);
+        $this->set(compact('accidente', 'code', 'message'));
+        $this->set('_serialize', ['accidente', 'code', 'message']);
     }
 
     /**
