@@ -61,6 +61,7 @@ class AccidentesController extends AppController
         if ($this->request->is('post')) {
             $accidente = $this->Accidentes->patchEntity($accidente, $this->request->data);
             
+            debug($accidente);
             if ($this->Accidentes->save($accidente)) {
                 $code = 200;
                 $message = 'El accidente fue guardado correctamente';
