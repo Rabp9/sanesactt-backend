@@ -148,9 +148,9 @@ class AccidentesController extends AppController
             $conn->begin();
             $saveStatus = 1;
             foreach ($accidentes as $accidente) {
-                $accidente->fecha = new FrozenDate($accidente->fecha);
-                $accidente->anio = $accidente->fecha->year;
-                $accidente->fechaHora = new FrozenTime($accidente->fecha . ' ' . $accidente->hora);
+                $fecha = new FrozenDate($accidente->fecha);
+                $accidente->anio = $fecha->year;
+                $accidente->fechaHora = new FrozenTime($fecha . ' ' . $accidente->hora);
                 $accidente->estado_id = 1;
                 
                 if(!$this->Accidentes->save($accidente))  {

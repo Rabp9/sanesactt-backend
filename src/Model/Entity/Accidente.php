@@ -6,7 +6,7 @@ use Cake\ORM\Entity;
 /**
  * Accidente Entity
  *
- * @property int $nro
+ * @property int $id
  * @property string $anio
  * @property \Cake\I18n\Time $fechaHora
  * @property int $fallecidos_hombres
