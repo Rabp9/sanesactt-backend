@@ -2,3 +2,16 @@ Cosas por hacer
 1. revisar add ubicacion---------------------
 2. revisar add causa-------------------------
 3. dar los focus a los inputs
+4. Comprobar correspondencia entre csv y modelo mysql
+5. Boton crear accidnete
+6. Comprobar carga de csv
+7. inputs fellecidos y heridos en numeros
+8. Validar form accidente nuevo
+9. Validar form accidente editar
+10. Poner sm al modal de tipo de vehiculo y tipo de servicio
+11. comprobar que se cargue los detalles en la tabla
+12. crear ficha mapa
+13. crear pagina de mapa
+14. filtrar puntos negros (solo formato json)
+15. mostrar puntos negros en mapa
+16. ficha mantenedores -> ubicaciones -> causas
