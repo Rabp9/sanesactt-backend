@@ -52,21 +52,7 @@ class AccidentesTable extends Table
         ]);
         
         $this->hasMany('DetalleAccidentes', [
-            'foreignKey' => ['accidente_nro_id', 'accidente_anio']
+            'foreignKey' => 'accidente_id'
         ]);
-    }
-    
-    /*
-    public function beforeSave($event, $entity, $options) {
-        $last_accidente = $this->find()
-            ->where(['anio' => $entity->anio])
-            ->order(['id' => 'DESC'])
-            ->first();
-        if ($last_accidente) {
-            $entity->nro_id = $last_accidente->nro_id + 1;            
-        } else {
-            $entity->nro_id = 1;
-        }
-    }
-    */                                                                                                                                                                                                                                     
+    }                                                                                                                                                                                                                              
 }

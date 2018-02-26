@@ -36,7 +36,9 @@ class AccidentesController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $accidente = $this->Accidentes->get($id);
+        $accidente = $this->Accidentes->get($id, [
+            'contain' => ['DetalleAccidentes']
+        ]);
 
         $this->set(compact('accidente'));
         $this->set('_serialize', ['accidente']);
