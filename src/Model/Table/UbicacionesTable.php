@@ -46,6 +46,10 @@ class UbicacionesTable extends Table
         $this->hasMany('DetalleUbicaciones', [
             'foreignKey' => 'ubicacion_id'
         ]);
+        
+        $this->hasMany('Accidentes', [
+            'foreignKey' => 'ubicacion_id'
+        ]);
     }
 
     /**

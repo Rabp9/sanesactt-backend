@@ -106,6 +106,10 @@ Router::scope('/', function ($routes) {
             'preview/' => [
                 'action' => 'preview',
                 'method' => 'POST'
+            ],
+            'getPuntosNegros' => [
+                'action' => 'getPuntosNegros',
+                'method' => 'GET'
             ]
         ]
     ]);

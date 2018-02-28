@@ -191,4 +191,30 @@ class UbicacionesController extends AppController
             $this->set("_serialize", ["message", "filename"]);
         }
     }
+    
+    /*
+     * Get Puntos Negros method
+     *
+     * @return \Cake\Network\Response|null
+     */
+    public function getPuntosNegros() {
+        $limite = $this->request->param('limite');
+        $limite = 0;
+        $fecha_inicio = '2018-01-01';
+        $fecha_cierre = '2018-12-31';
+        $query = $this->Ubicaciones->find();
+        
+        $query->select(['Ubicaciones.id', 'Ubicaciones.descripcion', 'Ubicaciones.longitud', 'Ubicaciones.latitud', 'total' => $query->func()->count('Accidentes.id')])
+            ->where(function($exp) use ($fecha_inicio, $fecha_cierre) {
+                return $exp->between('Accidentes.fechaHora', $fecha_inicio, $fecha_cierre, 'date');
+            })
+            ->leftJoinWith('Accidentes')
+            ->having(['total >' => $limite])
+            ->group(['Ubicaciones.id']);
+        $ubicaciones = $query->toArray();
+        
+        $this->set(compact('ubicaciones'));
+        $this->set('_serialize', ['ubicaciones']);
+    }
+
 }
