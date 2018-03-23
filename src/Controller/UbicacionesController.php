@@ -198,10 +198,10 @@ class UbicacionesController extends AppController
      * @return \Cake\Network\Response|null
      */
     public function getPuntosNegros() {
-        $limite = $this->request->param('limite');
-        $limite = 0;
-        $fecha_inicio = '2018-01-01';
-        $fecha_cierre = '2018-12-31';
+        $limite = $this->request->query('limite');
+        $fecha_inicio = $this->request->query('fecha_inicio');
+        $fecha_cierre = $this->request->query('fecha_cierre');
+        
         $query = $this->Ubicaciones->find();
         
         $query->select(['Ubicaciones.id', 'Ubicaciones.descripcion', 'Ubicaciones.longitud', 'Ubicaciones.latitud', 'total' => $query->func()->count('Accidentes.id')])
@@ -209,7 +209,7 @@ class UbicacionesController extends AppController
                 return $exp->between('Accidentes.fechaHora', $fecha_inicio, $fecha_cierre, 'date');
             })
             ->leftJoinWith('Accidentes')
-            ->having(['total >' => $limite])
+            ->having(['total >=' => $limite])
             ->group(['Ubicaciones.id']);
         $ubicaciones = $query->toArray();
         
