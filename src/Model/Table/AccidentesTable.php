@@ -40,12 +40,12 @@ class AccidentesTable extends Table
 
         $this->belongsTo('Ubicaciones', [
             'foreignKey' => 'ubicacion_id',
-            'joinType' => 'INNER'
-        ]);
+            'joinType' => 'LEFT'
+        ])->property('ubicacion');
         $this->belongsTo('Causas', [
             'foreignKey' => 'causa_id',
-            'joinType' => 'INNER'
-        ]);
+            'joinType' => 'LEFT'
+        ])->property('causa');
         $this->belongsTo('Estados', [
             'foreignKey' => 'estado_id',
             'joinType' => 'INNER'

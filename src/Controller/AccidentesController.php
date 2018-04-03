@@ -22,7 +22,8 @@ class AccidentesController extends AppController
      */
     public function index() {
         $accidentes = $this->Accidentes->find()
-            ->where(['estado_id IN' => [1, 3]]);
+            ->where(['Accidentes.estado_id IN' => [1, 3]])
+            ->contain(['Ubicaciones', 'Causas']);
 
         $this->set(compact('accidentes'));
         $this->set('_serialize', ['accidentes']);
