@@ -21,12 +21,40 @@ class AccidentesController extends AppController
      * @return \Cake\Network\Response|null
      */
     public function index() {
-        $accidentes = $this->Accidentes->find()
+        $estado_id = $this->request->query('estado_id');
+        $text = $this->request->query('text');
+        $items_per_page = $this->request->query('items_per_page');
+        
+        $this->paginate = [
+            'limit' => $items_per_page
+        ];
+        
+        $query = $this->Accidentes->find()
             ->where(['Accidentes.estado_id IN' => [1, 3]])
             ->contain(['Ubicaciones', 'Causas']);
 
-        $this->set(compact('accidentes'));
-        $this->set('_serialize', ['accidentes']);
+        if ($estado_id) {
+            $query->where(['Accidentes.estado_id' => $estado_id]);
+        }
+        
+        if ($text) {
+            $query->where(['OR' => [
+                'Accidentes.ubicacion_dirty LIKE' => '%' . $text . '%',
+                'Accidentes.causa_dirty LIKE' => '%' . $text . '%',
+                'Ubicaciones.descripcion LIKE' => '%' . $text . '%',
+                'Causas.descripcion LIKE' => '%' . $text . '%'
+            ]]);
+        }
+        
+        $accidentes = $this->paginate($query);
+        $paginate = $this->request->param('paging')['Accidentes'];
+        $pagination = [
+            'totalItems' => $paginate['count'],
+            'itemsPerPage' =>  $paginate['perPage']
+        ];
+        
+        $this->set(compact('accidentes', 'pagination'));
+        $this->set('_serialize', ['accidentes', 'pagination']);
     }
 
     /**
