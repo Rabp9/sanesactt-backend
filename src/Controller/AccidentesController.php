@@ -21,7 +21,11 @@ class AccidentesController extends AppController
      * @return \Cake\Network\Response|null
      */
     public function index() {
-        $estado_id = $this->request->query('estado_id');
+        $estado_1 = $this->request->query('estado_1');
+        $estado_2 = $this->request->query('estado_2');
+        $estado_3 = $this->request->query('estado_3');
+        $estado_4 = $this->request->query('estado_4');
+        $estados = [];
         $text = $this->request->query('text');
         $items_per_page = $this->request->query('items_per_page');
         
@@ -30,12 +34,8 @@ class AccidentesController extends AppController
         ];
         
         $query = $this->Accidentes->find()
-            ->where(['Accidentes.estado_id IN' => [1, 3]])
-            ->contain(['Ubicaciones', 'Causas']);
-
-        if ($estado_id) {
-            $query->where(['Accidentes.estado_id' => $estado_id]);
-        }
+            ->contain(['Ubicaciones', 'Causas'])
+            ->order(['Accidentes.id' => 'ASC']);
         
         if ($text) {
             $query->where(['OR' => [
@@ -44,6 +44,26 @@ class AccidentesController extends AppController
                 'Ubicaciones.descripcion LIKE' => '%' . $text . '%',
                 'Causas.descripcion LIKE' => '%' . $text . '%'
             ]]);
+        }
+        
+        if ($estado_1 == 'true') {
+            array_push($estados, 1);
+        }
+        
+        if ($estado_2 == 'true') {
+            array_push($estados, 2);
+        }
+        
+        if ($estado_3 == 'true') {
+            array_push($estados, 3);
+        }
+        
+        if ($estado_4 == 'true') {
+            array_push($estados, 4);
+        }
+        
+        if (!empty($estados)) {
+            $query->where(['Accidentes.estado_id IN' => $estados]);
         }
         
         $accidentes = $this->paginate($query);
@@ -66,7 +86,7 @@ class AccidentesController extends AppController
      */
     public function view($id = null) {
         $accidente = $this->Accidentes->get($id, [
-            'contain' => ['DetalleAccidentes']
+            'contain' => ['DetalleAccidentes' => ['TipoVehiculos', 'TipoServicios']]
         ]);
 
         $this->set(compact('accidente'));
@@ -105,7 +125,9 @@ class AccidentesController extends AppController
         $accidente = $this->Accidentes->newEntity();
         if ($this->request->is('post')) {
             $accidente = $this->Accidentes->patchEntity($accidente, $this->request->data);
-            
+            if ($accidente->estado_id == 3 && $accidente->ubicacion_id != null && $accidente->causa_id != null) {
+                $accidente->estado_id = 4;
+            }
             if ($this->Accidentes->save($accidente)) {
                 $code = 200;
                 $message = 'El accidente fue guardado correctamente';
@@ -189,7 +211,7 @@ class AccidentesController extends AppController
                 $fecha = new FrozenDate($accidente->fecha);
                 $accidente->anio = $fecha->year;
                 $accidente->fechaHora = new FrozenTime($fecha . ' ' . $accidente->hora);
-                $accidente->estado_id = 1;
+                $accidente->estado_id = 3; // sin procesar
                 
                 if(!$this->Accidentes->save($accidente))  {
                     $saveStatus = 0;
