@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $TipoVehiculos
  * @property \Cake\ORM\Association\BelongsTo $TipoServicios
+ * @property \Cake\ORM\Association\BelongsTo $TipoServicios
  *
  * @method \App\Model\Entity\DetalleAccidente get($primaryKey, $options = [])
  * @method \App\Model\Entity\DetalleAccidente newEntity($data = null, array $options = [])
@@ -37,7 +38,7 @@ class DetalleAccidentesTable extends Table
         $this->displayField('id');
         $this->primaryKey('id');
 
-        $this->belongsTo('Accidente', [
+        $this->belongsTo('Accidentes', [
             'foreignKey' => 'accidente_id',
             'joinType' => 'INNER'
         ]);

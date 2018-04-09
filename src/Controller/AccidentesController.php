@@ -219,6 +219,7 @@ class AccidentesController extends AppController
             }
             if ($saveStatus) {
                 $conn->commit();
+                $code = 200;
                 $message =  [
                     'text' => __('Los asccidentes fueron guardados correctamente'),
                     'type' => 'success',
@@ -232,7 +233,7 @@ class AccidentesController extends AppController
             }
         }
         
-        $this->set(compact('message', 'accidentes'));
-        $this->set("_serialize", ['message']);
+        $this->set(compact('message', 'accidentes', 'code'));
+        $this->set("_serialize", ['message', 'accidentes', 'code']);
     }
 }
