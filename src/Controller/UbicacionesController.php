@@ -205,12 +205,14 @@ class UbicacionesController extends AppController
         $query = $this->Ubicaciones->find();
         
         $query->select(['Ubicaciones.id', 'Ubicaciones.descripcion', 'Ubicaciones.longitud', 'Ubicaciones.latitud', 'total' => $query->func()->count('Accidentes.id')])
+            ->leftJoinWith('Accidentes')
+            ->group(['Ubicaciones.id', 'Ubicaciones.descripcion', 'Ubicaciones.longitud', 'Ubicaciones.latitud'])
             ->where(function($exp) use ($fecha_inicio, $fecha_cierre) {
                 return $exp->between('Accidentes.fechaHora', $fecha_inicio, $fecha_cierre, 'date');
             })
             ->leftJoinWith('Accidentes')
             ->having(['total >=' => $limite])
-            ->group(['Ubicaciones.id']);
+            ->group(['Ubicaciones.id', 'Ubicaciones.descripcion', 'Ubicaciones.longitud', 'Ubicaciones.latitud']);
         $ubicaciones = $query->toArray();
         
         $this->set(compact('ubicaciones'));
