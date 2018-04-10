@@ -17,13 +17,44 @@ class CausasController extends AppController
      * @return \Cake\Network\Response|null
      */
     public function index() {
+        $estado_1 = $this->request->query('estado_1');
+        $estado_2 = $this->request->query('estado_2');
+        $estados = [];
+        $text = $this->request->query('text');
+        $items_per_page = $this->request->query('items_per_page');
+        
         $this->paginate = [
-            'contain' => ['Estados']
+            'limit' => $items_per_page
         ];
-        $causas = $this->paginate($this->Causas);
-
-        $this->set(compact('causas'));
-        $this->set('_serialize', ['causas']);
+        
+        $query = $this->Causas->find()
+            ->order(['Causas.id' => 'ASC']);
+        
+        if ($text) {
+            $query->where(['Causas.descripcion LIKE' => '%' . $text . '%']);
+        }
+        
+        if ($estado_1 == 'true') {
+            array_push($estados, 1);
+        }
+        
+        if ($estado_2 == 'true') {
+            array_push($estados, 2);
+        }
+        
+        if (!empty($estados)) {
+            $query->where(['Causas.estado_id IN' => $estados]);
+        }
+        
+        $causas = $this->paginate($query);
+        $paginate = $this->request->param('paging')['Causas'];
+        $pagination = [
+            'totalItems' => $paginate['count'],
+            'itemsPerPage' =>  $paginate['perPage']
+        ];
+        
+        $this->set(compact('causas', 'pagination'));
+        $this->set('_serialize', ['causas', 'pagination']);
     }
 
     /**

@@ -16,13 +16,44 @@ class UbicacionesController extends AppController
      * @return \Cake\Network\Response|null
      */
     public function index() {
+        $estado_1 = $this->request->query('estado_1');
+        $estado_2 = $this->request->query('estado_2');
+        $estados = [];
+        $text = $this->request->query('text');
+        $items_per_page = $this->request->query('items_per_page');
+        
         $this->paginate = [
-            'contain' => ['Estados']
+            'limit' => $items_per_page
         ];
-        $ubicaciones = $this->paginate($this->Ubicaciones);
-
-        $this->set(compact('ubicaciones'));
-        $this->set('_serialize', ['ubicaciones']);
+        
+        $query = $this->Ubicaciones->find()
+            ->order(['Ubicaciones.id' => 'ASC']);
+        
+        if ($text) {
+            $query->where(['Ubicaciones.descripcion LIKE' => '%' . $text . '%']);
+        }
+        
+        if ($estado_1 == 'true') {
+            array_push($estados, 1);
+        }
+        
+        if ($estado_2 == 'true') {
+            array_push($estados, 2);
+        }
+        
+        if (!empty($estados)) {
+            $query->where(['Ubicaciones.estado_id IN' => $estados]);
+        }
+        
+        $ubicaciones = $this->paginate($query);
+        $paginate = $this->request->param('paging')['Ubicaciones'];
+        $pagination = [
+            'totalItems' => $paginate['count'],
+            'itemsPerPage' =>  $paginate['perPage']
+        ];
+        
+        $this->set(compact('ubicaciones', 'pagination'));
+        $this->set('_serialize', ['ubicaciones', 'pagination']);
     }
 
     /**
