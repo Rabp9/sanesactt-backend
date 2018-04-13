@@ -64,12 +64,10 @@ class UbicacionesController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $ubicacione = $this->Ubicaciones->get($id, [
-            'contain' => ['Estados']
-        ]);
+        $ubicacion = $this->Ubicaciones->get($id);
 
-        $this->set('ubicacione', $ubicacione);
-        $this->set('_serialize', ['ubicacione']);
+        $this->set('ubicacion', $ubicacion);
+        $this->set('_serialize', ['ubicacion']);
     }
 
     /**
