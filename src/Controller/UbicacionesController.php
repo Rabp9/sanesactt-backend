@@ -76,8 +76,9 @@ class UbicacionesController extends AppController
      * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
+        $ubicacion = $this->Ubicaciones->newEntity();
         if ($this->request->is('post')) {
-            $ubicacion = $this->Ubicaciones->newEntity($this->request->data);
+            $ubicacion = $this->Ubicaciones->patchEntity($ubicacion, $this->request->data);
             $ubicacion->estado_id = 1;
             
             $path_src = WWW_ROOT . "tmp" . DS;

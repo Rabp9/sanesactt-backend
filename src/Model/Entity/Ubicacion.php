@@ -28,9 +28,7 @@ class Ubicacion extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
-        'id' => false,
-        'estado_id' => false
+        '*' => true
     ];
     
     protected $_virtual = ['Key', 'Value'];
