@@ -65,9 +65,7 @@ class CausasController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $causa = $this->Causas->get($id, [
-            'contain' => ['Estados']
-        ]);
+        $causa = $this->Causas->get($id);
 
         $this->set('causa', $causa);
         $this->set('_serialize', ['causa']);
@@ -79,25 +77,20 @@ class CausasController extends AppController
      * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
      */
     public function add() {
-        $this->viewBuilder()->layout(false);
         $causa = $this->Causas->newEntity();
-        $causa->estado_id = 1;
         if ($this->request->is('post')) {
             $causa = $this->Causas->patchEntity($causa, $this->request->data);
+            $causa->estado_id = 1;
+            
             if ($this->Causas->save($causa)) {
-                $message =  [
-                    'text' => __('La Causa fue registrada correctamente'),
-                    'type' => 'success',
-                ];
+                $code = 200;
+                $message = 'La causa fue guardada correctamente';
             } else {
-                $message =  [
-                    'text' => __('La Causa no fue registrada correctamente'),
-                    'type' => 'error',
-                ];
+                $message = 'La causa no fue guardada correctamente';
             }
         }
-        $this->set(compact('causa', 'message'));
-        $this->set('_serialize', ['causa', 'message']);
+        $this->set(compact('causa', 'code', 'message'));
+        $this->set('_serialize', ['causa', 'code', 'message']);
     }
 
     /**

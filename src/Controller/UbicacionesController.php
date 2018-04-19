@@ -88,7 +88,7 @@ class UbicacionesController extends AppController
             $ubicacion->foto = $this->Random->randomFileName($path_dst, 'ubicacion-');
             
             if ($file_tmp->copy($path_dst . $ubicacion->foto)) {
-                if ($this->Ubicaciones->save($ubicacion)) {              
+                if ($this->Ubicaciones->save($ubicacion)) {
                     $code = 200;
                     $message = 'La ubicación fue guardada correctamente';
                 } else {

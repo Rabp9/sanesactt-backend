@@ -146,8 +146,7 @@ class AccidentesController extends AppController
      * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
+    public function edit($id = null) {
         $accidente = $this->Accidentes->get($id, [
             'contain' => []
         ]);
@@ -220,16 +219,10 @@ class AccidentesController extends AppController
             if ($saveStatus) {
                 $conn->commit();
                 $code = 200;
-                $message =  [
-                    'text' => __('Los asccidentes fueron guardados correctamente'),
-                    'type' => 'success',
-                ];
+                $message = 'Los asccidentes fueron guardados correctamente';
             } else {
                 $conn->rollback();
-                $message =  [
-                    'text' => __('Los asccidentes no fueron guardados correctamente'),
-                    'type' => 'error',
-                ];
+                $message = 'Los asccidentes no fueron guardados correctamente';
             }
         }
         
