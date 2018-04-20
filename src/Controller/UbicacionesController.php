@@ -81,21 +81,30 @@ class UbicacionesController extends AppController
             $ubicacion = $this->Ubicaciones->patchEntity($ubicacion, $this->request->data);
             $ubicacion->estado_id = 1;
             
-            $path_src = WWW_ROOT . "tmp" . DS;
-            $file_tmp = new File($path_src . $ubicacion->foto);
-            
-            $path_dst = WWW_ROOT . 'img' . DS . 'ubicaciones' . DS;
-            $ubicacion->foto = $this->Random->randomFileName($path_dst, 'ubicacion-');
-            
-            if ($file_tmp->copy($path_dst . $ubicacion->foto)) {
+            if ($ubicacion->foto) {
+                $path_src = WWW_ROOT . "tmp" . DS;
+                $file_tmp = new File($path_src . $ubicacion->foto);
+
+                $path_dst = WWW_ROOT . 'img' . DS . 'ubicaciones' . DS;
+                $ubicacion->foto = $this->Random->randomFileName($path_dst, 'ubicacion-');
+
+                if ($file_tmp->copy($path_dst . $ubicacion->foto)) {
+                    if ($this->Ubicaciones->save($ubicacion)) {
+                        $code = 200;
+                        $message = 'La ubicación fue guardada correctamente';
+                    } else {
+                        $message = 'La ubicación no fue guardada correctamente';
+                    }
+                } else {
+                    $message = 'La ubicación no fue guardada correctamente';
+                }
+            } else {
                 if ($this->Ubicaciones->save($ubicacion)) {
                     $code = 200;
                     $message = 'La ubicación fue guardada correctamente';
                 } else {
                     $message = 'La ubicación no fue guardada correctamente';
                 }
-            } else {
-                $message = 'La ubicación no fue guardada correctamente';
             }
         }
         $this->set(compact('ubicacion', 'code', 'message'));

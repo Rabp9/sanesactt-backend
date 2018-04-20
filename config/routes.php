@@ -93,6 +93,7 @@ Router::scope('/', function ($routes) {
             ]
         ]
     ]);
+    $routes->resources('DetalleAccidentes');
     $routes->resources('Ubicaciones', [
         'map' => [
             'buscar/:texto' => [
