@@ -65,7 +65,7 @@ class CausasController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $causa = $this->Causas->get($id);
+        $causa = $this->Causas->get($id, ['contain' => ['DetalleCausas']]);
 
         $this->set('causa', $causa);
         $this->set('_serialize', ['causa']);

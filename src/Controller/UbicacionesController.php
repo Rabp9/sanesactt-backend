@@ -64,7 +64,7 @@ class UbicacionesController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null) {
-        $ubicacion = $this->Ubicaciones->get($id);
+        $ubicacion = $this->Ubicaciones->get($id, ['contain' => ['DetalleUbicaciones']]);
 
         $this->set('ubicacion', $ubicacion);
         $this->set('_serialize', ['ubicacion']);

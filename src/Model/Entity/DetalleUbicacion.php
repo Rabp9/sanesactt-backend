@@ -27,9 +27,6 @@ class DetalleUbicacion extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
-        'id' => false,
-        'ubicacion_id' => false,
-        'estado_id' => true
+        '*' => true
     ];
 }

@@ -27,9 +27,6 @@ class DetalleCausa extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
-        'id' => false,
-        'causa_id' => false,
-        'estado_id' => true
+        '*' => true
     ];
 }
