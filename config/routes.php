@@ -130,6 +130,22 @@ Router::scope('/', function ($routes) {
     ]);
     $routes->resources('TipoVehiculos');
     $routes->resources('TipoServicios');
+    $routes->resources('Users', [
+        'map' => [
+            'getPersonas' => [
+                'action' => 'getPersonas',
+                'method' => 'GET'
+            ],
+            'getAdmin' => [
+                'action' => 'getAdmin',
+                'method' => 'GET'
+            ],
+            'token' => [
+                'action' => 'token',
+                'method' => 'POST'
+            ]
+        ]
+    ]);
 });
 
 Plugin::routes();

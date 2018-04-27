@@ -75,8 +75,15 @@ use Cake\Utility\Security;
  * that changes from configuration that does not. This makes deployment simpler.
  */
 try {
+    Configure::write('CAKEPHP_DEBUG', getenv('CAKEPHP_DEBUG'));
+    Configure::write('prefix_systram', 'systram_tmt');
+    Configure::write('prefix_sanesactt', 'sanesactt');
+    
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
+    if (Configure::read('CAKEPHP_DEBUG') == 2) {
+        Configure::load('appserver', 'default', true);
+    }
 } catch (\Exception $e) {
     exit($e->getMessage() . "\n");
 }
@@ -224,6 +231,9 @@ if (Configure::read('debug')) {
 }
 
 Plugin::load('Cors', ['bootstrap' => true, 'routes' => false]);
+Plugin::load('ADmad/JwtAuth');
 
 use Cake\I18n\FrozenTime;
 FrozenTime::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');
+use Cake\I18n\FrozenDate;
+FrozenDate::setJsonEncodeFormat('yyyy-MM-dd');
