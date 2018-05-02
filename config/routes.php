@@ -130,6 +130,9 @@ Router::scope('/', function ($routes) {
     ]);
     $routes->resources('TipoVehiculos');
     $routes->resources('TipoServicios');
+    $routes->resources('Controllers');
+    $routes->resources('RolUsers');
+    $routes->resources('Roles');
     $routes->resources('Users', [
         'map' => [
             'getPersonas' => [
