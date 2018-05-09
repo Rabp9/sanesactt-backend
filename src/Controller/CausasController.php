@@ -80,7 +80,6 @@ class CausasController extends AppController
         $causa = $this->Causas->newEntity();
         if ($this->request->is('post')) {
             $causa = $this->Causas->patchEntity($causa, $this->request->data);
-            $causa->estado_id = 1;
             
             if ($this->Causas->save($causa)) {
                 $code = 200;

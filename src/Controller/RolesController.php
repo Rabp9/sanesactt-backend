@@ -26,6 +26,18 @@ class RolesController extends AppController
     }
     
     /**
+     * Index method
+     *
+     * @return \Cake\Network\Response|null
+     */
+    public function getAdmin() {
+        $roles = $this->Roles->find()->where(['estado_id' => 1]);
+
+        $this->set(compact('roles'));
+        $this->set('_serialize', ['roles']);
+    }
+    
+    /**
      * View method
      *
      * @param string|null $id Personal id.
@@ -48,7 +60,6 @@ class RolesController extends AppController
      */
     public function add() {
         $rol = $this->Roles->newEntity($this->request->getData());
-        $rol->estado_id = 1;
         
         if ($this->request->is('post')) {
             if ($this->Roles->save($rol)) {

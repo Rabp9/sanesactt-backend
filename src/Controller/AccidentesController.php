@@ -125,6 +125,9 @@ class AccidentesController extends AppController
         $accidente = $this->Accidentes->newEntity();
         if ($this->request->is('post')) {
             $accidente = $this->Accidentes->patchEntity($accidente, $this->request->data);
+            if (!$accidente->id) {
+                $accidente->estado_id = 1;
+            }
             if ($accidente->estado_id == 3 && $accidente->ubicacion_id != null && $accidente->causa_id != null) {
                 $accidente->estado_id = 4;
             }

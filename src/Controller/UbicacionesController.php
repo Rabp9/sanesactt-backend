@@ -79,7 +79,6 @@ class UbicacionesController extends AppController
         $ubicacion = $this->Ubicaciones->newEntity();
         if ($this->request->is('post')) {
             $ubicacion = $this->Ubicaciones->patchEntity($ubicacion, $this->request->data);
-            $ubicacion->estado_id = 1;
             
             if ($ubicacion->foto) {
                 $path_src = WWW_ROOT . "tmp" . DS;
