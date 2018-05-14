@@ -131,6 +131,13 @@ class AccidentesController extends AppController
             if ($accidente->estado_id == 3 && $accidente->ubicacion_id != null && $accidente->causa_id != null) {
                 $accidente->estado_id = 4;
             }
+            
+            if ($accidente->ubicacion_dirty) {
+                $ubicacion =  $this->Accidentes->Ubicaciones->DetalleUbicaciones->find()
+                    ->contain(['Ubicaciones'])
+                    ->where(['DetalleUbicaciones.descripcion' => $accidente->ubicacion_dirty])->first()->ubicacion;
+            }
+            
             if ($this->Accidentes->save($accidente)) {
                 $code = 200;
                 $message = 'El accidente fue guardado correctamente';
