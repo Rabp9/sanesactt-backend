@@ -132,12 +132,6 @@ class AccidentesController extends AppController
                 $accidente->estado_id = 4;
             }
             
-            if ($accidente->ubicacion_dirty) {
-                $ubicacion =  $this->Accidentes->Ubicaciones->DetalleUbicaciones->find()
-                    ->contain(['Ubicaciones'])
-                    ->where(['DetalleUbicaciones.descripcion' => $accidente->ubicacion_dirty])->first()->ubicacion;
-            }
-            
             if ($this->Accidentes->save($accidente)) {
                 $code = 200;
                 $message = 'El accidente fue guardado correctamente';
@@ -222,6 +216,23 @@ class AccidentesController extends AppController
                 $accidente->fechaHora = new FrozenTime($fecha . ' ' . $accidente->hora);
                 $accidente->estado_id = 3; // sin procesar
                 
+                if ($accidente->ubicacion_dirty != "") {
+                    $detalleUbicacion =  $this->Accidentes->Ubicaciones->DetalleUbicaciones->find()
+                        ->contain(['Ubicaciones'])
+                        ->where(['DetalleUbicaciones.descripcion' => $accidente->ubicacion_dirty])->first();
+                    if ($detalleUbicacion != null) {
+                        $accidente->ubicacion_id = $detalleUbicacion->ubicacion->id;
+                    }
+                }
+                
+                if ($accidente->causa_dirty != "") {
+                    $detalleCausa =  $this->Accidentes->Causas->DetalleCausas->find()
+                        ->contain(['Causas'])
+                        ->where(['DetalleCausas.descripcion' => $accidente->causa_dirty])->first();
+                    if ($detalleCausa != null) {
+                        $accidente->causa_id = $detalleCausa->causa->id;
+                    }
+                }
                 if(!$this->Accidentes->save($accidente))  {
                     $saveStatus = 0;
                 }

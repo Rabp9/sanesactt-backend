@@ -10,6 +10,10 @@ use Cake\Filesystem\File;
  */
 class UbicacionesController extends AppController
 {
+    public function initialize() {
+        parent::initialize();
+        $this->Auth->allow(['puntosNegros']);
+    }
     /**
      * Index method
      *
@@ -257,4 +261,11 @@ class UbicacionesController extends AppController
         $this->set('_serialize', ['ubicaciones']);
     }
 
+    public function puntosNegros() {
+        $pdf = new \FPDF('L');
+        $this->viewBuilder()->setLayout('pdf'); //this will use the pdf.ctp layout
+        $this->set(compact('pdf'));
+
+        $this->response->type("application/pdf");
+    }
 }
