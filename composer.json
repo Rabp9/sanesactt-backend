@@ -12,8 +12,7 @@
         "cakephp/plugin-installer": "~1.0",
         "josegonzalez/dotenv": "2.*",
         "ozee31/cakephp-cors": "^1.1",
-        "admad/cakephp-jwt-auth": "^2.0",
-        "setasign/fpdf": "^1.8"
+        "admad/cakephp-jwt-auth": "^2.0"
     },
     "require-dev": {
         "psy/psysh": "@stable",

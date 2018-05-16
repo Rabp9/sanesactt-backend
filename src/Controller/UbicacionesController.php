@@ -262,10 +262,5 @@ class UbicacionesController extends AppController
     }
 
     public function puntosNegros() {
-        $pdf = new \FPDF('L');
-        $this->viewBuilder()->setLayout('pdf'); //this will use the pdf.ctp layout
-        $this->set(compact('pdf'));
-
-        $this->response->type("application/pdf");
     }
 }
