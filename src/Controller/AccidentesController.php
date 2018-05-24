@@ -250,4 +250,79 @@ class AccidentesController extends AppController
         $this->set(compact('message', 'accidentes', 'code'));
         $this->set("_serialize", ['message', 'accidentes', 'code']);
     }
+    
+    public function getReportAnual() {
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $fecha = new FrozenDate($fechaCierre);
+        $year = $fecha->year;
+        
+        $labels = [];
+        $datos = [];
+        for ($i = $year - 4; $i <= $year; $i++) {
+            $labels[] = $i;
+            $datos[] = $this->Accidentes->find()
+                ->where([
+                    'YEAR(fechaHora)' => $i,
+                    'ubicacion_id' => $ubicacion_id,
+                    'estado_id !=' => 2
+                ])->count();
+        }
+        
+        $this->set(compact('labels', 'datos'));
+        $this->set("_serialize", ['labels', 'datos']);
+    }
+    
+    public function getReportMensual() {
+        $fechaInicio = $this->request->getData('fechaInicio');
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $fechaInicioFD = new FrozenDate($fechaInicio);
+        $fechaCierreFD = new FrozenDate($fechaCierre);
+        
+        $labels = [];
+        $datos = [];
+        
+        while ($fechaInicioFD != $fechaCierreFD) {
+            $fechaInicioFD = $fechaInicioFD->addMonth();
+            $labels[] = $fechaInicioFD->i18nFormat('MMM') . "-" . $fechaInicioFD->year;
+            
+            $datos[] = $this->Accidentes->find()
+                ->where([
+                    'MONTH(fechaHora)' => $fechaInicioFD->i18nFormat('MM'),
+                    'YEAR(fechaHora)' => $fechaInicioFD->format('Y'),
+                    'ubicacion_id' => $ubicacion_id,
+                    'estado_id !=' => 2
+                ])->count();
+        }
+        
+        $this->set(compact('labels', 'datos'));
+        $this->set("_serialize", ['labels', 'datos']);
+    }
+    
+    public function getReportDiario() {
+        $fechaInicio = $this->request->getData('fechaInicio');
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $fechaInicioFD = new FrozenDate($fechaInicio);
+        $fechaCierreFD = new FrozenDate($fechaCierre);
+        
+        $labels = ['Dom.', 'Lun.', 'Mar.', 'Mié.', 'Jue.', 'Vie.', 'Sáb.'];
+        for ($i = 1; $i <= sizeof($labels); $i++) {
+            $datos[] = $this->Accidentes->find()
+                ->where([
+                    'fechaHora >' => $fechaInicio,
+                    'fechaHora <=' => $fechaCierre,
+                    'DAYOFWEEK(fechaHora)' => $i,
+                    'ubicacion_id' => $ubicacion_id,
+                    'estado_id !=' => 2
+                ])->count();
+        }
+        
+        $this->set(compact('labels', 'datos'));
+        $this->set("_serialize", ['labels', 'datos']);
+    }
 }

@@ -90,6 +90,42 @@ Router::scope('/', function ($routes) {
             'getByNroIdNAnio' => [
                 'action' => 'getByNroIdNAnio',
                 'method' => 'GET'
+            ],
+            'getReportAnual' => [
+                'action' => 'getReportAnual',
+                'method' => 'POST'
+            ],
+            'getReportMensual' => [
+                'action' => 'getReportMensual',
+                'method' => 'POST'
+            ],
+            'getReportDiario' => [
+                'action' => 'getReportDiario',
+                'method' => 'POST'
+            ],
+            'getReportServicios' => [
+                'action' => 'getReportServicios',
+                'method' => 'POST'
+            ],
+            'getReportPorHora' => [
+                'action' => 'getReportPorHora',
+                'method' => 'POST'
+            ],
+            'getReportVehiculos' => [
+                'action' => 'getReportVehiculos',
+                'method' => 'POST'
+            ],
+            'getReportCausas' => [
+                'action' => 'getReportCausas',
+                'method' => 'POST'
+            ],
+            'getReportConsecuencias' => [
+                'action' => 'getReportConsecuencias',
+                'method' => 'POST'
+            ],
+            'getReportDetalle' => [
+                'action' => 'getReportDetalle',
+                'method' => 'POST'
             ]
         ]
     ]);

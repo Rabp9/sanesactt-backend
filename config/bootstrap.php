@@ -237,3 +237,4 @@ use Cake\I18n\FrozenTime;
 FrozenTime::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');
 use Cake\I18n\FrozenDate;
 FrozenDate::setJsonEncodeFormat('yyyy-MM-dd');
+FrozenDate::setDefaultLocale('es-LA');
