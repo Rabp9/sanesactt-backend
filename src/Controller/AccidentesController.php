@@ -7,6 +7,7 @@ require_once(ROOT . DS . 'vendor' . DS . 'rabp9' . DS . 'CsvImporter.php');
 use Cake\I18n\FrozenDate;
 use Cake\I18n\FrozenTime;
 use Cake\Datasource\ConnectionManager;
+use Cake\Utility\Hash;
 /**
  * Accidentes Controller
  *
@@ -307,9 +308,6 @@ class AccidentesController extends AppController
         $fechaCierre = $this->request->getData('fechaCierre');
         $ubicacion_id = $this->request->getData('ubicacion_id');
         
-        $fechaInicioFD = new FrozenDate($fechaInicio);
-        $fechaCierreFD = new FrozenDate($fechaCierre);
-        
         $labels = ['Dom.', 'Lun.', 'Mar.', 'Mié.', 'Jue.', 'Vie.', 'Sáb.'];
         for ($i = 1; $i <= sizeof($labels); $i++) {
             $datos[] = $this->Accidentes->find()
@@ -317,6 +315,60 @@ class AccidentesController extends AppController
                     'fechaHora >' => $fechaInicio,
                     'fechaHora <=' => $fechaCierre,
                     'DAYOFWEEK(fechaHora)' => $i,
+                    'ubicacion_id' => $ubicacion_id,
+                    'estado_id !=' => 2
+                ])->count();
+        }
+        
+        $this->set(compact('labels', 'datos'));
+        $this->set("_serialize", ['labels', 'datos']);
+    }
+    
+    public function getReportServicios() {
+        $fechaInicio = $this->request->getData('fechaInicio');
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $servicios = $this->Accidentes->DetalleAccidentes->TipoServicios->find()
+            ->distinct(['descripcion'])->toArray();
+        
+        $labels = Hash::extract($servicios, '{n}.descripcion');
+        
+        foreach ($servicios as $servicio) {
+            $datos[] = $this->Accidentes->find()
+                ->matching('DetalleAccidentes', function($q) use($servicio) {
+                    return $q->where(['DetalleAccidentes.tipo_servicio_id' => $servicio->id]);
+                })
+                ->where([
+                    'fechaHora >' => $fechaInicio,
+                    'fechaHora <=' => $fechaCierre,
+                    'ubicacion_id' => $ubicacion_id,
+                    'estado_id !=' => 2
+                ])->count();
+        }
+        
+        $this->set(compact('labels', 'datos'));
+        $this->set("_serialize", ['labels', 'datos']);
+    }
+    
+    public function getReportVehiculos() {
+        $fechaInicio = $this->request->getData('fechaInicio');
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $servicios = $this->Accidentes->DetalleAccidentes->TipoVehiculos->find()
+            ->distinct(['descripcion'])->toArray();
+        
+        $labels = Hash::extract($servicios, '{n}.descripcion');
+        
+        foreach ($servicios as $servicio) {
+            $datos[] = $this->Accidentes->find()
+                ->matching('DetalleAccidentes', function($q) use($servicio) {
+                    return $q->where(['DetalleAccidentes.tipo_vehiculo_id' => $servicio->id]);
+                })
+                ->where([
+                    'fechaHora >' => $fechaInicio,
+                    'fechaHora <=' => $fechaCierre,
                     'ubicacion_id' => $ubicacion_id,
                     'estado_id !=' => 2
                 ])->count();
