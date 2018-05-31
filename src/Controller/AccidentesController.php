@@ -286,7 +286,7 @@ class AccidentesController extends AppController
         $labels = [];
         $datos = [];
         
-        while ($fechaInicioFD != $fechaCierreFD) {
+        while ($fechaInicioFD <= $fechaCierreFD) {
             $fechaInicioFD = $fechaInicioFD->addMonth();
             $labels[] = $fechaInicioFD->i18nFormat('MMM') . "-" . $fechaInicioFD->year;
             
@@ -377,4 +377,134 @@ class AccidentesController extends AppController
         $this->set(compact('labels', 'datos'));
         $this->set("_serialize", ['labels', 'datos']);
     }
+    
+    public function getReportPorHora() {
+        $fechaInicio = $this->request->getData('fechaInicio');
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $labels = ['Madr.', 'Maña.', 'Tard.', 'Noch.'];
+        
+        // Madrugada
+        $datos[] = $this->Accidentes->find()
+            ->where([
+                'fechaHora >' => $fechaInicio,
+                'fechaHora <=' => $fechaCierre,
+                'HOUR(fechaHora) >=' => 0,
+                'HOUR(fechaHora) <' => 6,
+                'ubicacion_id' => $ubicacion_id,
+                'estado_id !=' => 2
+            ])->count();
+        
+        // Mañana
+        $datos[] = $this->Accidentes->find()
+            ->where([
+                'fechaHora >' => $fechaInicio,
+                'fechaHora <=' => $fechaCierre,
+                'HOUR(fechaHora) >=' => 6,
+                'HOUR(fechaHora) <' => 12,
+                'ubicacion_id' => $ubicacion_id,
+                'estado_id !=' => 2
+            ])->count();
+        
+        // Tarde
+        $datos[] = $this->Accidentes->find()
+            ->where([
+                'fechaHora >' => $fechaInicio,
+                'fechaHora <=' => $fechaCierre,
+                'HOUR(fechaHora) >=' => 12,
+                'HOUR(fechaHora) <' => 18,
+                'ubicacion_id' => $ubicacion_id,
+                'estado_id !=' => 2
+            ])->count();
+        
+        // Noche
+        $datos[] = $this->Accidentes->find()
+            ->where([
+                'fechaHora >' => $fechaInicio,
+                'fechaHora <=' => $fechaCierre,
+                'HOUR(fechaHora) >=' => 18,
+                'HOUR(fechaHora) <' => 24,
+                'ubicacion_id' => $ubicacion_id,
+                'estado_id !=' => 2
+            ])->count();
+        
+        $this->set(compact('labels', 'datos'));
+        $this->set("_serialize", ['labels', 'datos']);
+    }
+    
+    public function getReportCausas() {
+        $fechaInicio = $this->request->getData('fechaInicio');
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $causas = $this->Accidentes->Causas->find()
+            ->distinct(['descripcion'])->toArray();
+        
+        $labels = Hash::extract($causas, '{n}.descripcion');
+        
+        foreach ($causas as $causa) {
+            $datos[] = $this->Accidentes->find()
+                ->where([
+                    'Accidentes.fechaHora >' => $fechaInicio,
+                    'Accidentes.fechaHora <=' => $fechaCierre,
+                    'Accidentes.ubicacion_id' => $ubicacion_id,
+                    'Accidentes.causa_id' => $causa->id,
+                    'Accidentes.estado_id !=' => 2
+                ])->count();
+        }
+        
+        $this->set(compact('labels', 'datos'));
+        $this->set("_serialize", ['labels', 'datos']);
+    }
+    
+    public function getReportConsecuencias() {
+        $fechaInicio = $this->request->getData('fechaInicio');
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $labels = ['Heridos', 'Fallecidos'];
+        
+        $query = $this->Accidentes->find();
+        $query
+            ->select([
+                'sum_heridos_mujeres' => $query->func()->sum('heridos_mujeres'),
+                'sum_heridos_hombres' => $query->func()->sum('heridos_hombres'),
+                'sum_fallecidos_mujeres' => $query->func()->sum('fallecidos_mujeres'),
+                'sum_fallecidos_hombres' => $query->func()->sum('fallecidos_hombres')
+            ])
+            ->where([
+                'fechaHora >' => $fechaInicio,
+                'fechaHora <=' => $fechaCierre,
+                'ubicacion_id' => $ubicacion_id,
+                'estado_id !=' => 2
+            ]);
+        
+        $sumas = $query->first();
+        
+        $datos[] = $sumas['sum_heridos_mujeres'] + $sumas['sum_heridos_hombres'];
+        $datos[] = $sumas['sum_fallecidos_mujeres'] + $sumas['sum_fallecidos_hombres'];
+        
+        $this->set(compact('labels', 'datos'));
+        $this->set("_serialize", ['labels', 'datos']);
+    }
+    
+    public function getReportDetalle() {
+        $fechaInicio = $this->request->getData('fechaInicio');
+        $fechaCierre = $this->request->getData('fechaCierre');
+        $ubicacion_id = $this->request->getData('ubicacion_id');
+        
+        $cantidad = $this->Accidentes->find()
+            ->where([
+                'fechaHora >' => $fechaInicio,
+                'fechaHora <=' => $fechaCierre,
+                'ubicacion_id' => $ubicacion_id,
+                'estado_id !=' => 2
+            ])->count();
+        
+        
+        $this->set(compact('cantidad'));
+        $this->set("_serialize", ['cantidad']);
+    }
+    
 }
