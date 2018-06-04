@@ -384,6 +384,7 @@ class AccidentesController extends AppController
         $ubicacion_id = $this->request->getData('ubicacion_id');
         
         $labels = ['Madr.', 'Maña.', 'Tard.', 'Noch.'];
+        $labelsExtra = ['00-06 horas', '06-12 horas', '12-18 horas', '18-24 horas'];
         
         // Madrugada
         $datos[] = $this->Accidentes->find()
@@ -429,8 +430,8 @@ class AccidentesController extends AppController
                 'estado_id !=' => 2
             ])->count();
         
-        $this->set(compact('labels', 'datos'));
-        $this->set("_serialize", ['labels', 'datos']);
+        $this->set(compact('labels', 'datos', 'labelsExtra'));
+        $this->set("_serialize", ['labels', 'datos', 'labelsExtra']);
     }
     
     public function getReportCausas() {
